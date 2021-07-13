@@ -1,4 +1,4 @@
-const Friend=({friendPlay,setFriendPlay, serverId, setServerId,playerType, opponentType, msgCreated, setMsgCreated})=>{
+const Friend=({friendPlay,setFriendPlay, serverId,playerType, opponentType, msgCreated, setMsgCreated, setTotalSeconds})=>{
     let db=firebase.database()
     const [elements, setElements]=React.useState([])
     const [currentState,setCurrentState ]= React.useState(true)
@@ -63,6 +63,7 @@ const Friend=({friendPlay,setFriendPlay, serverId, setServerId,playerType, oppon
         db.ref(serverId+"/restart").set({"playerType":true})
         setWin(false)
         setPreventStatus(false)
+        setTotalSeconds(0)
     }
     const updateWin=(winner)=>{
         if(preventStatus){
@@ -161,6 +162,7 @@ const Friend=({friendPlay,setFriendPlay, serverId, setServerId,playerType, oppon
             if(e.val()==true){
                 setWin(false)
                 setPreventStatus(false)
+                setTotalSeconds(0)
                 db.ref(serverId+"/restart").set({"playerType":false})
             }                    
         })
@@ -195,7 +197,7 @@ const Friend=({friendPlay,setFriendPlay, serverId, setServerId,playerType, oppon
     }, [wait])
     return (
         <div>
-            <div className="pt-5">
+            <div className="pt-3">
             </div>
             <div className="row tic-border" style={{margin:"auto auto"}}>
                 <div

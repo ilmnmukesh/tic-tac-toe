@@ -15,12 +15,10 @@ const checkTwo2 = (el, pos1, pos2, pos3)=>{
 }
 const checkTwoPos0=(el)=>{
     let [a, b]=checkTwo2(el, 0, 1, 2)
-    console.log("a",a, b)
     if(a && !el[b].click){
         return [a,b]
     }
     [a, b]=checkTwo2(el, 0, 3, 6)
-    console.log("b",a, b, el[b].click)
     if(a && !el[b].click){
         return [a,b]
     }
@@ -60,7 +58,6 @@ const checkTwoPos8=(el)=>{
     return [false, b]
 }
 const Medium=(el, req, len)=>{
-    console.log(el, len)
     if(len>7){
         return Math.floor(Math.random()*len)
     }
@@ -130,7 +127,7 @@ const checkPos8=(el)=>{
     }
     return [false,el[8].X]
 }
-const Page=({page, setPage, mode})=>{
+const Page=({page, setPage, mode, setTotalSeconds})=>{
     const [elements, setElements]=React.useState([])
     const [currentState,setCurrentState ]= React.useState(true)
     const [emptyPos, setEmptyPos]=React.useState([...Array(9).keys()])
@@ -194,6 +191,7 @@ const Page=({page, setPage, mode})=>{
         setWin(false)
         setEmptyPos([...Array(9).keys()])
         setPlay(play)
+        setTotalSeconds(0)
     }
     const updateWin=(winner)=>{
         if(winner){

@@ -3,6 +3,8 @@ const Start=({page, setPage, setMode, setCpuMode, setFriendPlay, serverId, setSe
     const [start, setStart]=React.useState(true)
     const [playFriends, setPlayFriends]=React.useState(false)
     const [joinCreate, setJoinCreate]=React.useState(false)
+    const [generateLoading, setGenerateLoading]= React.useState(false)
+    const [connectLoading, setConnectLoading]=React.useState(false)
     const [code, setCode]=React.useState("")
     const [err, setErr]=React.useState("")
     const enableStart=()=>{
@@ -29,6 +31,7 @@ const Start=({page, setPage, setMode, setCpuMode, setFriendPlay, serverId, setSe
             setMode({...m})
     }
     const generate =()=>{
+        setGenerateLoading(true)
         let db=firebase.database()
         let code=Math.floor(Math.random()*90000) + 10000
         db.ref(code.toString()).set({"user_created":"created"})
@@ -41,11 +44,14 @@ const Start=({page, setPage, setMode, setCpuMode, setFriendPlay, serverId, setSe
         setServerId(code.toString())
     }
     const connectServer=()=>{
+        setErr("")
         if(code==null&& code==""){
             return
         }
+        setConnectLoading(true)
         if(code.length!=5){
             setErr("Code must 5 character")
+            setConnectLoading(false)
             return
         }
         let db=firebase.database()
@@ -106,10 +112,12 @@ const Start=({page, setPage, setMode, setCpuMode, setFriendPlay, serverId, setSe
                         setFriendPlay(false) 
                     }else{
                         setErr("Room Full")
+                        setConnectLoading(false)
                     }
                 })
             }else{
                 setErr("Invalid Code")
+                setConnectLoading(false)
             }
         })
     }
@@ -119,7 +127,7 @@ const Start=({page, setPage, setMode, setCpuMode, setFriendPlay, serverId, setSe
         $(".toast").toast("show")
     }, [])
     return (
-        <div className="text-center">
+        <div className="text-center pt-sm-3">
             <div className="pt-5">
                 <div className="pt-5" >
                     <button onClick={enableStart} className={`btn btn-md ${start?"btn-outline-purple":"btn-purple" }`}>Start</button>
@@ -148,25 +156,47 @@ const Start=({page, setPage, setMode, setCpuMode, setFriendPlay, serverId, setSe
                     >Create</button>
                 </div>
                 <div className={!joinCreate?"pt-5 container col-8 col-md-4 col-lg-3":"d-none"} style={{fontFamily:"'Source Code Pro', monospace"}}>
-                    <div class="md-form text-center">
+                    <div class="md-form text-center m-0">
                         <input class="form-control" maxLength={5} onKeyDown={(e)=>{
                             if(e.key=="Enter"){
                                 connectServer()
                             }
                         }} onChange={e=>setCode(e.target.value)} name="code" type="text" required/>
                         <label class="text-center border-0">Enter Code</label>
-                        <small class="text-danger">{err}</small>
+                        <small class="text-danger">
+                            {
+                                connectLoading
+                                ?
+                                <div class="spinner-border text-secondary" role="status" style={{width:25, height:25}}>
+                                    <span class="visually-hidden"></span>
+                                </div>
+                                :
+                                err
+                            }
+                        </small>
                     </div>
-                    <div class="mt-5">
+                    <div class="mt-md-5">
                         <button onClick={connectServer} type="submit" class="btn-rounded btn btn-outline-grey btn-block my-4 waves-effect">Connect</button>
                     </div>
                 </div>
                 <div className={joinCreate?"pt-5 container col-8 col-md-4 col-lg-3":"d-none"} style={{fontFamily:"'Source Code Pro', monospace"}}>
-                    <div class="mt-3">
-                        <p>{serverId}</p>
+                    <div class="text-center">
+                        <p class="col-12">{serverId}</p>
                         <button disabled={serverId!=""}
                         onClick={generate} class="btn-rounded btn btn-outline-grey btn-block my-4 waves-effect">Generate</button>
                     </div>
+                    {
+                        generateLoading
+                        ?
+                        <div className="text-center">
+                            <h6 className="mb-3">Wait for opponent</h6>
+                            <div class="spinner-border text-secondary" role="status">
+                                <span class="visually-hidden"></span>
+                            </div>
+                        </div>
+                        :
+                        <div></div>
+                    }
                 </div>
             </div>
             
