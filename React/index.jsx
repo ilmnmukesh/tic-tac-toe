@@ -1,11 +1,20 @@
-const Header=()=>{
+const Header=({totalSeconds, setTotalSeconds, friendPlay, page})=>{
     return (
         <div className="h3 text-center pt-3"  style={{fontFamily:"'Source Code Pro', monospace"}}>
             Tic Tac Toe
+            {
+                friendPlay && page
+                ?
+                <div></div>
+                :
+                <Timer totalSeconds={totalSeconds} setTotalSeconds={setTotalSeconds}/>    
+            }
+            
         </div>
     )
 }
 const App=()=>{
+    const [totalSeconds, setTotalSeconds]= React.useState(0)
     const [page,setPage] = React.useState(true) 
     const [friendPlay,setFriendPlay] = React.useState(true) 
     const [serverId, setServerId]=React.useState("")
@@ -27,7 +36,12 @@ const App=()=>{
 
     return (
         <div>
-            <Header/>
+            <Header 
+                totalSeconds={totalSeconds} 
+                setTotalSeconds={setTotalSeconds}
+                friendPlay={friendPlay}
+                page={page}
+            />
             {
                 friendPlay
                 ?
@@ -49,11 +63,11 @@ const App=()=>{
                     (
                         cpuMode
                         ?
-                            <Page page={page} setPage={setPage} mode={mode} />
+                            <Page page={page} setPage={setPage} mode={mode} setTotalSeconds={setTotalSeconds} />
                         
                         :
                         
-                            <PlayBack page={page} setPage={setPage} mode={mode}/>
+                            <PlayBack page={page} setPage={setPage} setTotalSeconds={setTotalSeconds}/>
                     )
                 )
                 :
@@ -61,11 +75,11 @@ const App=()=>{
                     friendPlay={friendPlay} 
                     setFriendPlay={setFriendPlay}
                     serverId ={serverId}
-                    setServerId={setServerId}
                     playerType={playerType}
                     opponentType= {opponentType}
                     msgCreated={msgCreated}
                     setMsgCreated={setMsgCreated}
+                    setTotalSeconds={setTotalSeconds}
                 />
             }
             

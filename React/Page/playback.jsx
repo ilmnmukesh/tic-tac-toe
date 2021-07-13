@@ -1,4 +1,4 @@
-const PlayBack=({page, setPage, mode})=>{
+const PlayBack=({page, setPage, setTotalSeconds})=>{
     const [elements, setElements]=React.useState([])
     const [currentState,setCurrentState ]= React.useState(true)
     const [win, setWin]= React.useState(false)
@@ -49,6 +49,7 @@ const PlayBack=({page, setPage, mode})=>{
         }
         setElements([...el])
         setWin(false)
+        setTotalSeconds(0)
     }
     const updateWin=(winner)=>{
         if(winner){
@@ -95,7 +96,7 @@ const PlayBack=({page, setPage, mode})=>{
 
     return (
         <div>
-            <div className="pt-5">
+            <div className="pt-3">
             </div>
             <div className="row tic-border" style={{margin:"auto auto"}}>
                 <div
